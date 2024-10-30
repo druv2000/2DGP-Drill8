@@ -128,7 +128,8 @@ class Run:
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
         boy.x += boy.dir * 5
-        pass
+        if boy.x < 0 or boy.x > 800:
+            boy.x = max(0, min(boy.x, 800))
     @staticmethod
     def draw(boy):
         boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y)
