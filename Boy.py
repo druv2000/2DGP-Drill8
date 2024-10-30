@@ -25,8 +25,10 @@ class Idle:
    @staticmethod
    def do(boy):
        boy.frame = (boy.frame + 1) % 8
-       if get_time() - boy.start_time > 0.5:
-           boy.state_machine.add_event(('TIME_OUT', 0))
+
+       # sleep 상태 비활성화 해둠
+       # if get_time() - boy.start_time > 1:
+       #     boy.state_machine.add_event(('TIME_OUT', 0))
        pass
 
    @staticmethod
@@ -80,7 +82,8 @@ class AutoRun:
 
     @staticmethod
     def do(boy):
-        boy.frame = (boy.frame + 1) % 8
+        if get_time() - boy.start_time > 5:
+            boy.state_machine.add_event(('TIME_OUT', 0))
         pass
 
     @staticmethod
@@ -124,8 +127,12 @@ class Boy:
         self.state_machine.set_transitions(
             {
                 Sleep:  {space_down: Idle, right_down: Run, left_down: Run, right_up: Run, left_up: Run},
-                Idle:   {time_out: Sleep, right_down: Run, left_down: Run, right_up: Run, left_up: Run},
-                Run:    {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle}
+                Idle:   {time_out: Sleep, right_down: Run, left_down: Run, right_up: Run, left_up: Run,
+                         a_down: AutoRun},
+                Run:    {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle},
+                AutoRun: {right_down: Run, left_down: Run, right_up: Run, left_up: Run,
+                          time_out: Idle}
+
             }
         )
 

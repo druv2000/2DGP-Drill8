@@ -1,5 +1,6 @@
 # event ( 이벤트 종류, 실제 값 )
-from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT
+from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_a
+
 
 def start(event):
     return event[0] == 'START'
@@ -31,6 +32,11 @@ def left_up(event):
     return (event[0] == 'INPUT' and
             event[1].type == SDL_KEYUP and
             event[1].key == SDLK_LEFT)
+
+def a_down(event):
+    return(event[0] == 'INPUT' and
+           event[1].type == SDL_KEYDOWN and
+           event[1].key == SDLK_a)
 
 
 
