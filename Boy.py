@@ -1,4 +1,5 @@
 from pico2d import load_image, get_time
+from sdl2 import SDL_SetTextureColorMod
 
 from state_machine import *
 
@@ -14,6 +15,11 @@ class Idle:
        elif left_down(event) or right_up(event):
            boy.action = 3
            boy.dir = 1
+       elif time_out(event):
+           if boy.dir == 1:
+               boy.action = 3
+           elif boy.dir == -1:
+               boy.action = 2
 
        boy.start_time = get_time()
        pass
@@ -74,20 +80,36 @@ class AutoRun:
     @staticmethod
     def enter(boy, event):
         boy.start_time = get_time()
+        if boy.dir == 1: boy.action = 1
+        elif boy.dir == -1: boy.action = 0
         pass
 
     @staticmethod
     def exit(boy, event):
+        boy.image.opacify(1.0)
         pass
 
     @staticmethod
     def do(boy):
+        boy.frame = (boy.frame + 1) % 8
+        boy.x += boy.dir * 10
+        if boy.x < 0 or boy.x > 800:
+            boy.dir *= -1
+            boy.x = max(0, min(boy.x, 800))
+
+            if boy.dir == 1:
+                boy.action = 1
+            else:
+                boy.action = 0
+
         if get_time() - boy.start_time > 5:
             boy.state_machine.add_event(('TIME_OUT', 0))
         pass
 
     @staticmethod
     def draw(boy):
+        boy.image.opacify(boy.frame / 10)
+        boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y)
         pass
 
 
