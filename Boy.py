@@ -112,8 +112,6 @@ class AutoRun:
         boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y)
         pass
 
-
-
 class Run:
     @staticmethod
     def enter(boy, event):
